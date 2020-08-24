@@ -1,1 +1,4 @@
 # genre-classification
+
+Dataset: GTZAN
+
