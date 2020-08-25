@@ -14,6 +14,7 @@ class AudioFile():
         self.sr = 44100
         self.data, self.sr = self.load(self.path, self.sr) # audio time series as numpy array
         self.zeroCross = self.zero_crossings()
+        self.mfccs = self.mfcc()
 
     def load(self, path, rate):
         return librosa.load(path, rate)
@@ -32,7 +33,7 @@ class AudioFile():
     def waveform_zoom(self):
         plt.figure()
         plt.subplot(3, 1, 1)
-        librosa.display.waveplot(self.data[15000:16000], sr=self.sr)
+        librosa.display.waveplot(self.data[15500:16000], sr=self.sr)
         plt.show()
 
     def spectrogram(self):
@@ -47,7 +48,7 @@ class AudioFile():
     # features -------------------------------------
     # TODO: add range as parameter
     def zero_crossings(self):
-        return sum(librosa.zero_crossings(self.data[15000:16000], pad=False))
+        return sum(librosa.zero_crossings(self.data[15500:16000], pad=False))
 
     # center of mmass for a sound (CURRENTLY A PLOT)
     def spec_cent(self):
@@ -91,6 +92,22 @@ class AudioFile():
 
         plt.plot(t, normalise(spectral_rolloff), color='r')
         plt.show()
+
+    # Mel frequency cepstral coefficients
+        # set of features that describe the overall spahe of the spectral envelope
+    def mfcc(self):
+        mfccs = librosa.feature.mfcc(self.data, sr=self.sr) # mfccs.shape (20, 97) - 20 MFCC s over 97 frames
+
+        plt.figure()
+        plt.subplot(3, 1, 1)
+        librosa.display.specshow(mfccs, sr=self.sr, x_axis='time')
+        plt.show()
+
+        return mfccs
+
+        
+    def mfcc_scale():
+        pass
 
 
     
