@@ -64,7 +64,7 @@ class AudioFile():
         frames = range(len(spectral_centroids))
         t = librosa.frames_to_time(frames)
 
-        # normamlise 
+        # normamlise
         normal = normalise(spectral_centroids, 0)
 
         #Plotting the Spectral Centroid along the waveform
@@ -105,10 +105,21 @@ class AudioFile():
 
         return mfccs
 
-        
-    def mfcc_scale():
-        pass
+
+    def mfcc_scale(self):
+        mfccs = librosa.feature.mfcc(self.data, sr=self.sr)
+        mfccs = sklearn.preprocessing.scale(mfccs, axis=1)
+        print(mfccs.mean(axis=1))
+        print(mfcss.var(axis=1))
+
+        plt.figure()
+        plt.subplot(3, 1, 1)
+        librosa.display.specshow(mfccs, sr=self.sr, x_axis='time')
+        plt.show()
 
 
-    
-
+    # entire spectrum projected onto 12 bins representing 12 distinct semitones/ chroma of the octave
+    def chroma_freq(self):
+        hop_length = 512
+        chromagram = librosa.feature.chroma_stft(self.data, sr=self.sr, hop_length=hop_length)
+        librosa.display.specshow(chromagram, x_axis='time', y_axis='chroma', hop_length=hop_length, cmap='coolwarm')
